@@ -1,3 +1,12 @@
 .posts {
     padding: 1.25rem 1.6rem;
 }
+
+a:hover {
+    text-decoration: none;
+}
+
+.container {
+    min-height: calc(100vh - 56px);
+    margin-top: 56px;
+}

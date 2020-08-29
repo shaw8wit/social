@@ -2,17 +2,38 @@
 
 {% block body %}
 <h2 class="p-3 mt-3">All Posts</h2>
-<div class="posts card">
+<div class="posts card mb-4">
     <div class="card-title">
         <h5>New Post</h5>
     </div>
     <form action="{% url 'createPost' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
-            <textarea class="form-control" name="post__content" rows="5"
-                placeholder="Content for new post.."></textarea>
+            <textarea class="form-control" name="content" rows="5" placeholder="Content for new post.."></textarea>
         </div>
         <button class="btn btn-dark px-4 py-2 float-right" type="submit">Post</button>
     </form>
 </div>
+
+{% for post in posts %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="card-title">
+            <h5>
+                {{ post.user.username }}
+                {% if post.user == user %}
+                <button class="btn btn-outline-info ml-4 px-4">Edit</button>
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-text">{{ post.content }}</div>
+        <div class="card-text">
+            <small>{{ post.date }} <a href="#">❤️ {{ post.likes }}</a></small>
+            <button class="btn btn-outline-warning ml-4 px-4">Comment</button>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="alert alert-info p-4">No Posts Yet!</div>
+{% endfor %}
 {% endblock %}
