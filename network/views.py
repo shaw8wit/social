@@ -15,6 +15,13 @@ def index(request):
     })
 
 
+def following(request):
+    se = {user.id for user in request.user.following.all()}
+    return render(request, "network/index.html", {
+        "posts": reversed(Post.objects.filter(user__in=se))
+    })
+
+
 def login_view(request):
     if request.method == "POST":
 
@@ -75,4 +82,33 @@ def createPost(request):
         post = Post.objects.create(
             user=user, content=content, date=time, likes=0)
         post.save()
-        return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("index"))
+
+
+def profile(request, id):
+    count = 0
+    reqUser = User.objects.get(id=id)
+    for user in User.objects.all():
+        if user.following.filter(id=id).exists():
+            count += 1
+    posts = Post.objects.filter(user=reqUser)
+    return render(request, "network/profile.html", {
+        'userInfo': reqUser,
+        'following': request.user.following.filter(id=id).exists(),
+        'followers': count,
+        'posts': reversed(posts)
+    })
+
+
+def follow(request):
+    if request.method == "POST":
+        user = User.objects.get(id=request.POST["user"])
+        follower = request.user
+        following = request.POST["following"]
+        if following == "True":
+            follower.following.remove(user)
+        else:
+            follower.following.add(user)
+        follower.save()
+        return HttpResponseRedirect(reverse("profile", kwargs={'id': user.id}))
+    return HttpResponseRedirect(reverse("index"))

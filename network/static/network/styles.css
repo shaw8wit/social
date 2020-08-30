@@ -7,6 +7,31 @@ a:hover {
 }
 
 .container {
-    min-height: calc(100vh - 56px);
-    margin-top: 56px;
+    height: calc(100vh - 5.5rem);
+    margin-top: 4.5rem;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: 1fr;
+    border: 2px solid black;
+    height: 100%;
+    justify-items: center;
+    /* align-items: start; */
+    text-align: center;
+}
+
+.profile>* {
+    border: 2px solid red;
+
+}
+
+.card-text {
+    position: relative;
+}
+
+.btn__comment {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
 }

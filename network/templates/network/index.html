@@ -2,6 +2,8 @@
 
 {% block body %}
 <h2 class="p-3 mt-3">All Posts</h2>
+
+{% if user.is_authenticated %}
 <div class="posts card mb-4">
     <div class="card-title">
         <h5>New Post</h5>
@@ -14,23 +16,24 @@
         <button class="btn btn-dark px-4 py-2 float-right" type="submit">Post</button>
     </form>
 </div>
+{% endif %}
 
 {% for post in posts %}
 <div class="card mb-4">
     <div class="card-body">
+        {% if post.user == user %}
+        <button class="btn btn-outline-info ml-4 px-4 float-right">Edit</button>
+        {% endif %}
+
         <div class="card-title">
-            <h5>
-                {{ post.user.username }}
-                {% if post.user == user %}
-                <button class="btn btn-outline-info ml-4 px-4">Edit</button>
-                {% endif %}
-            </h5>
+            <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a></h5>
         </div>
-        <div class="card-text">{{ post.content }}</div>
         <div class="card-text">
+            <p>{{ post.content }}</p>
             <small>{{ post.date }} <a href="#">❤️ {{ post.likes }}</a></small>
-            <button class="btn btn-outline-warning ml-4 px-4">Comment</button>
+            <button class="btn btn-outline-warning ml-4 px-4 btn__comment">Comment</button>
         </div>
+
     </div>
 </div>
 {% empty %}
