@@ -1,7 +1,3 @@
-.posts {
-    padding: 1.25rem 1.6rem;
-}
-
 a:hover {
     text-decoration: none;
 }
@@ -26,12 +22,6 @@ a:hover {
 
 }
 
-.card-text {
-    position: relative;
-}
-
-.btn__comment {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-}
+/* body {
+    background: red;
+} */

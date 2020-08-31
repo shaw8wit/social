@@ -4,34 +4,40 @@
 <h2 class="p-3 mt-3">All Posts</h2>
 
 {% if user.is_authenticated %}
-<div class="posts card mb-4">
-    <div class="card-title">
-        <h5>New Post</h5>
-    </div>
-    <form action="{% url 'createPost' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <textarea class="form-control" name="content" rows="5" placeholder="Content for new post.."></textarea>
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="card-title">
+            <h5>New Post</h5>
         </div>
-        <button class="btn btn-dark px-4 py-2 float-right" type="submit">Post</button>
-    </form>
+        <form action="{% url 'createPost' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea class="form-control" name="content" rows="5" placeholder="Content for new post.."></textarea>
+            </div>
+            <button class="btn btn-dark px-4 py-2 float-right" type="submit">Post</button>
+        </form>
+    </div>
 </div>
 {% endif %}
 
 {% for post in posts %}
 <div class="card mb-4">
-    <div class="card-body">
-        {% if post.user == user %}
-        <button class="btn btn-outline-info ml-4 px-4 float-right">Edit</button>
-        {% endif %}
+    <div class="card-body post_body">
 
         <div class="card-title">
-            <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a></h5>
+            <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a>
+                {% if post.user == user %}
+                <button class="btn btn-outline-info px-4 float-right ml-2 edit_button">Edit</button>
+                {% endif %}
+            </h5>
         </div>
         <div class="card-text">
-            <p>{{ post.content }}</p>
+            <input type="hidden" name="id" value={{ post.id }}>
+            <div class="content pb-2">
+                {{ post.content }}
+            </div>
             <small>{{ post.date }} <a href="#">❤️ {{ post.likes }}</a></small>
-            <button class="btn btn-outline-warning ml-4 px-4 btn__comment">Comment</button>
+            <button class="btn btn-outline-warning px-3 float-right ml-2 mt-2 comment_button">Comment</button>
         </div>
 
     </div>
