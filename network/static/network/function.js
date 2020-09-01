@@ -30,11 +30,38 @@ const editPost = (e) => {
     }
 }
 
+const editLike = (status, e) => {
+    var value = parseInt(e.target.innerText.trim());
+    const id = e.path[1].querySelector('input[name="id"]').value;
+    value += (status) ? 1 : -1;
+    fetch(`/editPost/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                likes: value,
+            })
+        })
+        .then(response => {
+            if (response.status === 204) {
+                e.target.innerHTML = ` ${value}`;
+                e.target.classList.toggle('like--active');
+                e.target.classList.toggle('like--inactive');
+            } else {
+                return response.json();
+            }
+        })
+        .then(err => {
+            if (err !== undefined) alert(err.error);
+        });
+}
+
 const edit = (e) => {
     if (e.target.closest('.comment_button')) {
         console.log("comment pressed");
     } else if (e.target.closest('.edit_button')) {
         editPost(e);
+    } else if (e.target.closest('.like')) {
+        e.preventDefault();
+        editLike(e.target.classList.contains('like--active'), e);
     } else {
         return;
     }

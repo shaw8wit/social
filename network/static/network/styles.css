@@ -22,6 +22,19 @@ a:hover {
 
 }
 
+.like,
+.like:hover {
+    color: red;
+}
+
+.like--active::before {
+    content: "♡";
+}
+
+.like--inactive::before {
+    content: "❤";
+}
+
 /* body {
     background: red;
 } */

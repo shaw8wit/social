@@ -130,7 +130,7 @@ def editPost(request, id):
 
     # check if post existis
     try:
-        post = Post.objects.get(user=request.user, pk=id)
+        post = Post.objects.get(pk=id)
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
 
@@ -139,8 +139,15 @@ def editPost(request, id):
         content = json.loads(request.body)
         # if [content] of request body has data
         if content.get('content') is not None:
+            if post.user != request.user:
+                return JsonResponse({"error": "Cant edit someone else's post!"}, status=404)
             post.content = content['content']
-            post.save()
+        elif content.get('likes') is not None:
+            # TODO add user to many to many field and likes field dont exist anymore
+            post.likes = content['likes']
+            print(content['likes'])
+        post.save()
+
         return HttpResponse(status=204)
     else:
         return JsonResponse({
