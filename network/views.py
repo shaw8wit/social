@@ -1,7 +1,12 @@
+import json
+
 from django.urls import reverse
 from django.utils import timezone
 from django.shortcuts import render
 from django.db import IntegrityError
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
@@ -9,12 +14,13 @@ from .models import User, Post, Comment
 
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by("-date").all()
     return render(request, "network/index.html", {
-        "posts": reversed(posts)
+        "posts": posts
     })
 
 
+@login_required
 def following(request):
     se = {user.id for user in request.user.following.all()}
     return render(request, "network/index.html", {
@@ -74,6 +80,7 @@ def register(request):
         return render(request, "network/register.html")
 
 
+@login_required
 def createPost(request):
     if request.method == "POST":
         content = request.POST["content"]
@@ -88,18 +95,21 @@ def createPost(request):
 def profile(request, id):
     count = 0
     reqUser = User.objects.get(id=id)
+    following = False if request.user.is_anonymous else request.user.following.filter(
+        id=id).exists()
     for user in User.objects.all():
         if user.following.filter(id=id).exists():
             count += 1
     posts = Post.objects.filter(user=reqUser)
     return render(request, "network/profile.html", {
         'userInfo': reqUser,
-        'following': request.user.following.filter(id=id).exists(),
+        'following': following,
         'followers': count,
         'posts': reversed(posts)
     })
 
 
+@login_required
 def follow(request):
     if request.method == "POST":
         user = User.objects.get(id=request.POST["user"])
@@ -112,3 +122,27 @@ def follow(request):
         follower.save()
         return HttpResponseRedirect(reverse("profile", kwargs={'id': user.id}))
     return HttpResponseRedirect(reverse("index"))
+
+
+@csrf_exempt
+@login_required
+def editPost(request, id):
+
+    # check if post existis
+    try:
+        post = Post.objects.get(user=request.user, pk=id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # check if requested method is PUT
+    if request.method == "PUT":
+        content = json.loads(request.body)
+        # if [content] of request body has data
+        if content.get('content') is not None:
+            post.content = content['content']
+            post.save()
+        return HttpResponse(status=204)
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)

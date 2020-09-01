@@ -6,7 +6,7 @@
     <div class="profile__content">
         <h3>{{ userInfo.username }}</h3>
         <h5>{{ userInfo.email }}</h5>
-        {% if user != userInfo %}
+        {% if user != userInfo and user.is_authenticated %}
         <form action="{% url 'follow' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="user" value={{ userInfo.id }}>
