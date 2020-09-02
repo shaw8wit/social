@@ -54,18 +54,49 @@ const editLike = (e) => {
 
 const editComment = (e) => {
     var content = e.target.textContent;
+    const body = e.path[3];
     if (content === 'Comments') {
         e.target.textContent = 'Comment';
-        console.log(e.path);
+        const makeComment = document.createElement('div');
+        makeComment.className = "card comment";
+        makeComment.innerHTML = `
+            <div class="card-body">
+                <div class="card-title">
+                    <h6>Create Comment:</h6>
+                </div>
+                <div class="card-text form-group">
+                    <textarea class="form-control" name="comment" rows="2" placeholder="Write a comment.."></textarea>
+                </div>
+            </div>
+        `;
+        body.appendChild(makeComment);
     } else {
-        e.target.textContent = 'Comments';
-        console.log(e.path);
+        const comment = body.querySelector('.comment');
+        const value = comment.querySelector('textarea[name="comment"]').value.trim();
+        if (value.length === 0) {
+            alert("Comment can't be empty!");
+            return;
+        }
+        const id = body.querySelector('input[name="id"]').value;
+        fetch(`/comment/${id}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    comment: value,
+                })
+            })
+            .then(response => {
+                if (response.status === 204) {
+                    comment.remove();
+                    e.target.textContent = 'Comments';
+                } else {
+                    return response.json();
+                }
+            })
+            .then(err => err && alert(err.error));
     }
 }
-
 const edit = (e) => {
     if (e.target.closest('.comment_button')) {
-        console.log("comment pressed");
         editComment(e);
     } else if (e.target.closest('.edit_button')) {
         editPost(e);

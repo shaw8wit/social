@@ -21,6 +21,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.CharField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.id} : {self.user} commented {self.content} on {self.post}"
+        return f"{self.id} : {self.user} commented {self.content} on {self.post} at {self.date}"

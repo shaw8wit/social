@@ -83,11 +83,8 @@ def register(request):
 @login_required
 def createPost(request):
     if request.method == "POST":
-        content = request.POST["content"]
-        user = request.user
-        time = timezone.now()
         post = Post.objects.create(
-            user=user, content=content, date=time)
+            user=request.user, content=request.POST["content"], date=timezone.now())
         post.save()
     return HttpResponseRedirect(reverse("index"))
 
@@ -147,10 +144,34 @@ def editPost(request, id):
                 post.likedBy.add(request.user)
             else:
                 post.likedBy.remove(request.user)
-            print(content['likes'])
         post.save()
         return HttpResponse(status=204)
     else:
         return JsonResponse({
             "error": "PUT request required."
+        }, status=400)
+
+
+@csrf_exempt
+@login_required
+def comment(request, id):
+
+    # check if post existis
+    try:
+        post = Post.objects.get(pk=id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # check if requested method is POST
+    if request.method == "POST":
+        content = json.loads(request.body)
+        # if [comment] of request body has data
+        if content.get('comment') is not None:
+            comment = Comment.objects.create(
+                user=request.user, content=content['comment'], post=post, date=timezone.now())
+            comment.save()
+        return HttpResponse(status=204)
+    else:
+        return JsonResponse({
+            "error": "POST request required."
         }, status=400)
