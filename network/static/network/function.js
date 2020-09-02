@@ -30,14 +30,14 @@ const editPost = (e) => {
     }
 }
 
-const editLike = (status, e) => {
-    var value = parseInt(e.target.innerText.trim());
+const editLike = (e) => {
+    const status = e.target.classList.contains('like--active');
+    const value = parseInt(e.target.innerText.trim()) + ((status) ? 1 : -1);
     const id = e.path[1].querySelector('input[name="id"]').value;
-    value += (status) ? 1 : -1;
     fetch(`/editPost/${id}`, {
             method: 'PUT',
             body: JSON.stringify({
-                likes: value,
+                likes: status,
             })
         })
         .then(response => {
@@ -49,19 +49,29 @@ const editLike = (status, e) => {
                 return response.json();
             }
         })
-        .then(err => {
-            if (err !== undefined) alert(err.error);
-        });
+        .then(err => err && alert(err.error));
+}
+
+const editComment = (e) => {
+    var content = e.target.textContent;
+    if (content === 'Comments') {
+        e.target.textContent = 'Comment';
+        console.log(e.path);
+    } else {
+        e.target.textContent = 'Comments';
+        console.log(e.path);
+    }
 }
 
 const edit = (e) => {
     if (e.target.closest('.comment_button')) {
         console.log("comment pressed");
+        editComment(e);
     } else if (e.target.closest('.edit_button')) {
         editPost(e);
     } else if (e.target.closest('.like')) {
         e.preventDefault();
-        editLike(e.target.classList.contains('like--active'), e);
+        editLike(e);
     } else {
         return;
     }

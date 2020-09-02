@@ -36,8 +36,11 @@
             <div class="content pb-2">
                 {{ post.content }}
             </div>
-            <small>{{ post.date }}</small><a href="#" class="like like--active"> {{ post.likes }}</a>
-            <button class="btn btn-outline-warning px-3 float-right ml-2 mt-2 comment_button">Comment</button>
+            <small>{{ post.date }}</small>
+            <a href="#" class="like {% if user in post.likedBy.all %}like--inactive{% else %}like--active{% endif %}">
+                {{ post.likedBy.all.count }}
+            </a>
+            <button class="btn btn-outline-warning px-3 float-right ml-2 mt-2 comment_button">Comments</button>
         </div>
 
     </div>

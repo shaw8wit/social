@@ -87,7 +87,7 @@ def createPost(request):
         user = request.user
         time = timezone.now()
         post = Post.objects.create(
-            user=user, content=content, date=time, likes=0)
+            user=user, content=content, date=time)
         post.save()
     return HttpResponseRedirect(reverse("index"))
 
@@ -143,11 +143,12 @@ def editPost(request, id):
                 return JsonResponse({"error": "Cant edit someone else's post!"}, status=404)
             post.content = content['content']
         elif content.get('likes') is not None:
-            # TODO add user to many to many field and likes field dont exist anymore
-            post.likes = content['likes']
+            if content['likes']:
+                post.likedBy.add(request.user)
+            else:
+                post.likedBy.remove(request.user)
             print(content['likes'])
         post.save()
-
         return HttpResponse(status=204)
     else:
         return JsonResponse({
