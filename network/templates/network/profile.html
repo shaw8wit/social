@@ -2,33 +2,67 @@
 
 {% block body %}
 
-<div class="profile">
-    <div class="profile__content">
-        <h3>{{ userInfo.username }}</h3>
-        <h5>{{ userInfo.email }}</h5>
+<div class="profile fixed-top text-center container">
+    <div class="row mt-1">
+        <div class="col">
+            <h3>{{ userInfo.username }}</h3>
+            <h5>{{ userInfo.email }}</h5>
+        </div>
+
         {% if user != userInfo and user.is_authenticated %}
-        <form action="{% url 'follow' %}" method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="user" value={{ userInfo.id }}>
-            <input type="hidden" name="following" value={{ following }}>
-            <button class="btn btn-primary" type="submit">
-                {% if following %}
-                Unfollow
-                {% else %}
-                Follow
-                {% endif %}
-            </button>
-        </form>
+        <div class="col mt-2">
+            <form action="{% url 'follow' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="user" value={{ userInfo.id }}>
+                <input type="hidden" name="following" value={{ following }}>
+                <button class="btn btn-primary mb-2 py-3 px-4" type="submit">
+                    {% if following %}
+                    Unfollow
+                    {% else %}
+                    Follow
+                    {% endif %}
+                </button>
+            </form>
+        </div>
         {% endif %}
-        <div class="alert alert-dark">following: {{ userInfo.following.all.count }}</div>
-        <div class="alert alert-info">followers: {{ followers }}</div>
-        <h5>Posts:</h5>
-        {% for post in posts %}
-        <div class="alert">{{ post.content }}</div>
-        {% empty %}
-        <div class="alert alert-warning">No Posts Yet</div>
-        {% endfor %}
     </div>
+    <div class="row">
+        <div class="col alert alert-warning">following: {{ userInfo.following.all.count }}</div>
+        <div class="col alert alert-success">followers: {{ followers }}</div>
+    </div>
+</div>
+
+<div class="profile_post">
+    <h5>Posts:</h5>
+    {% for post in posts %}
+    <div class="card mb-4">
+        <div class="card-body post_body">
+
+            <div class="card-title">
+                <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a>
+                    {% if post.user == user %}
+                    <button class="btn px-4 float-right ml-2 edit_button">Edit</button>
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-text">
+                <input type="hidden" name="id" value={{ post.id }}>
+                <div class="content pb-2">
+                    {{ post.content }}
+                </div>
+                <small>{{ post.date }}</small>
+                <a href="#"
+                    class="like {% if user in post.likedBy.all %}like--inactive{% else %}like--active{% endif %}">
+                    {{ post.likedBy.all.count }}
+                </a>
+                <button class="btn px-3 float-right ml-2 mt-2 comment_button">Comments</button>
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info p-4">No Posts Yet!</div>
+    {% endfor %}
 </div>
 
 {% endblock %}

@@ -16,7 +16,8 @@ from .models import User, Post, Comment
 def index(request):
     posts = Post.objects.all().order_by("-date").all()
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": posts,
+        "canPost": True
     })
 
 
@@ -24,7 +25,8 @@ def index(request):
 def following(request):
     se = {user.id for user in request.user.following.all()}
     return render(request, "network/index.html", {
-        "posts": reversed(Post.objects.filter(user__in=se))
+        "posts": reversed(Post.objects.filter(user__in=se)),
+        "canPost": False
     })
 
 

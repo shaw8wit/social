@@ -7,21 +7,6 @@ a:hover {
     margin-top: 4.5rem;
 }
 
-.profile {
-    display: grid;
-    grid-template-columns: 1fr;
-    border: 2px solid black;
-    height: 100%;
-    justify-items: center;
-    /* align-items: start; */
-    text-align: center;
-}
-
-.profile>* {
-    border: 2px solid red;
-
-}
-
 .like,
 .like:hover {
     color: red;
@@ -33,6 +18,37 @@ a:hover {
 
 .like--inactive::before {
     content: "❤";
+}
+
+.comment_button {
+    border: 1.25px solid maroon;
+    color: maroon;
+}
+
+.comment_button:hover {
+    background: maroon;
+    color: white;
+}
+
+.edit_button {
+    border: 1px solid teal;
+    color: teal;
+}
+
+.edit_button:hover {
+    background: teal;
+    color: white;
+}
+
+.profile {
+    margin-top: 3.5rem;
+    height: auto;
+    background: whitesmoke;
+    border-radius: 0.5rem;
+}
+
+.profile_post {
+    margin-top: 13rem;
 }
 
 /* body {

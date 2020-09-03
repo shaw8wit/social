@@ -1,9 +1,15 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-<h2 class="p-3 mt-3">All Posts</h2>
+<h2 class="p-3 mt-3">
+    {% if canPost %}
+    All Posts
+    {% else %}
+    Following Posts
+    {% endif %}
+</h2>
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and canPost %}
 <div class="card mb-4">
     <div class="card-body">
         <div class="card-title">
@@ -27,7 +33,7 @@
         <div class="card-title">
             <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a>
                 {% if post.user == user %}
-                <button class="btn btn-outline-info px-4 float-right ml-2 edit_button">Edit</button>
+                <button class="btn px-4 float-right ml-2 edit_button">Edit</button>
                 {% endif %}
             </h5>
         </div>
@@ -40,7 +46,7 @@
             <a href="#" class="like {% if user in post.likedBy.all %}like--inactive{% else %}like--active{% endif %}">
                 {{ post.likedBy.all.count }}
             </a>
-            <button class="btn btn-outline-warning px-3 float-right ml-2 mt-2 comment_button">Comments</button>
+            <button class="btn px-3 float-right ml-2 mt-2 comment_button">Comments</button>
         </div>
 
     </div>
