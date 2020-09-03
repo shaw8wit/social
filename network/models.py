@@ -25,3 +25,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.id} : {self.user} commented {self.content} on {self.post} at {self.date}"
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "content": self.content,
+            "date": self.date.strftime("%b %-d %Y, %-I:%M %p")
+        }

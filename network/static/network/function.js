@@ -55,6 +55,7 @@ const editLike = (e) => {
 const editComment = (e) => {
     var content = e.target.textContent;
     const body = e.path[3];
+    const id = body.querySelector('input[name="id"]').value;
     if (content === 'Comments') {
         e.target.textContent = 'Comment';
         const makeComment = document.createElement('div');
@@ -69,6 +70,22 @@ const editComment = (e) => {
                 </div>
             </div>
         `;
+        fetch(`/comment/${id}`)
+            .then(response => response.json())
+            .then(e => {
+                e.forEach(item => {
+                    const comment = document.createElement('div');
+                    comment.className = "card";
+                    comment.innerHTML = `
+                        <div class="row text-center p-2 comment__value">
+                            <div class="col">${item.user}</div>
+                            <div class="col">${item.content}</div>
+                            <div class="col">${item.date}</div>
+                        </div>
+                    `;
+                    makeComment.appendChild(comment);
+                });
+            });
         body.appendChild(makeComment);
     } else {
         const comment = body.querySelector('.comment');
@@ -77,7 +94,6 @@ const editComment = (e) => {
             alert("Comment can't be empty!");
             return;
         }
-        const id = body.querySelector('input[name="id"]').value;
         fetch(`/comment/${id}`, {
                 method: 'POST',
                 body: JSON.stringify({

@@ -47,6 +47,10 @@ a:hover {
     border-radius: 0.5rem;
 }
 
+.comment__value {
+    font-size: 13px;
+}
+
 .profile_post {
     margin-top: 13rem;
 }

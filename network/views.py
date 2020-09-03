@@ -173,7 +173,10 @@ def comment(request, id):
                 user=request.user, content=content['comment'], post=post, date=timezone.now())
             comment.save()
         return HttpResponse(status=204)
+    elif request.method == "GET":
+        comments = Comment.objects.filter(post=post).order_by("-date").all()
+        return JsonResponse([item.serialize() for item in comments], safe=False)
     else:
         return JsonResponse({
-            "error": "POST request required."
+            "error": "GET or POST request required."
         }, status=400)
