@@ -30,6 +30,7 @@ const editPost = (e) => {
     }
 }
 
+
 const editLike = (e) => {
     const status = e.target.classList.contains('like--active');
     const value = parseInt(e.target.innerText.trim()) + ((status) ? 1 : -1);
@@ -52,6 +53,7 @@ const editLike = (e) => {
         .then(err => err && alert(err.error));
 }
 
+
 const editComment = (e) => {
     var content = e.target.textContent;
     const body = e.path[3];
@@ -66,7 +68,7 @@ const editComment = (e) => {
                     <h6>Create Comment:</h6>
                 </div>
                 <div class="card-text form-group">
-                    <textarea class="form-control" name="comment" rows="2" placeholder="Write a comment.."></textarea>
+                    <textarea class="form-control" name="comment" rows="2" placeholder="Write a comment.. or leave it empty to hide the comment section"></textarea>
                 </div>
             </div>
         `;
@@ -78,9 +80,9 @@ const editComment = (e) => {
                     comment.className = "card";
                     comment.innerHTML = `
                         <div class="row text-center p-2 comment__value">
-                            <div class="col">${item.user}</div>
+                            <div class="col"><a href="profile/${item.user}">${item.user}</a></div>
                             <div class="col">${item.content}</div>
-                            <div class="col">${item.date}</div>
+                            <div class="col"><small>${item.date}</small></div>
                         </div>
                     `;
                     makeComment.appendChild(comment);
@@ -91,7 +93,8 @@ const editComment = (e) => {
         const comment = body.querySelector('.comment');
         const value = comment.querySelector('textarea[name="comment"]').value.trim();
         if (value.length === 0) {
-            alert("Comment can't be empty!");
+            comment.remove();
+            e.target.textContent = 'Comments';
             return;
         }
         fetch(`/comment/${id}`, {
@@ -104,6 +107,7 @@ const editComment = (e) => {
                 if (response.status === 204) {
                     comment.remove();
                     e.target.textContent = 'Comments';
+                    editComment(e);
                 } else {
                     return response.json();
                 }
@@ -111,6 +115,8 @@ const editComment = (e) => {
             .then(err => err && alert(err.error));
     }
 }
+
+
 const edit = (e) => {
     if (e.target.closest('.comment_button')) {
         editComment(e);
@@ -122,7 +128,7 @@ const edit = (e) => {
     } else {
         return;
     }
-    // console.log(e);
 }
+
 
 document.querySelectorAll('.post_body').forEach(e => e.addEventListener('click', edit));

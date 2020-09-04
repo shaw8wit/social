@@ -31,7 +31,7 @@
     <div class="card-body post_body">
 
         <div class="card-title">
-            <h5><a href="{% url 'profile' post.user.id %}">{{ post.user.username }}</a>
+            <h5><a href="{% url 'profile' post.user.username %}">{{ post.user.username }}</a>
                 {% if post.user == user %}
                 <button class="btn px-4 float-right ml-2 edit_button">Edit</button>
                 {% endif %}

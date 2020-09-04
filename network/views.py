@@ -93,11 +93,11 @@ def createPost(request):
 
 def profile(request, id):
     count = 0
-    reqUser = User.objects.get(id=id)
+    reqUser = User.objects.get(username=id)
     following = False if request.user.is_anonymous else request.user.following.filter(
-        id=id).exists()
+        username=id).exists()
     for user in User.objects.all():
-        if user.following.filter(id=id).exists():
+        if user.following.filter(username=id).exists():
             count += 1
     posts = Post.objects.filter(user=reqUser)
     return render(request, "network/profile.html", {
