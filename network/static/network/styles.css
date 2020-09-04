@@ -40,7 +40,7 @@ a:hover {
     color: white;
 }
 
-.profile {
+/* .profile__details {
     position: fixed;
     left: 0px;
     padding: 2rem;
@@ -49,28 +49,27 @@ a:hover {
     background: whitesmoke;
     border-radius: 0.5rem;
     z-index: 2;
-}
+} */
 
 
 .comment__value {
     font-size: 14px;
 }
 
-.profile_post {
+/* .profile__post {
     position: fixed;
     top: 5rem;
     right: 0px;
     bottom: 5px;
     width: 65%;
     overflow-y: scroll;
-}
+} */
 
 @keyframes grow {
     0% {
         opacity: 0;
         height: 0px;
         line-height: 0px;
-
     }
 
     75% {
@@ -88,6 +87,21 @@ a:hover {
     animation-duration: 1s;
     animation-fill-mode: forwards;
     animation-play-state: paused;
+}
+
+.profile {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 5vw;
+    background: blue;
+}
+
+@media only screen and (max-width: 770px) {
+    .profile {
+        grid-template-rows: auto 1fr;
+        grid-gap: 5vh;
+        background: red;
+    }
 }
 
 /* body {

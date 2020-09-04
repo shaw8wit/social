@@ -155,7 +155,6 @@ def editPost(request, id):
 
 
 @csrf_exempt
-@login_required
 def comment(request, id):
 
     # check if post existis
@@ -167,12 +166,18 @@ def comment(request, id):
     # check if requested method is POST
     if request.method == "POST":
         content = json.loads(request.body)
-        # if [comment] of request body has data
-        if content.get('comment') is not None:
+
+        # if there user is not logged in
+        if request.user.is_authenticated:
             comment = Comment.objects.create(
                 user=request.user, content=content['comment'], post=post, date=timezone.now())
             comment.save()
-        return HttpResponse(status=204)
+            return HttpResponse(status=204)
+        else:
+            print("djslfjsdklfjkldsjlfkjsklfjklsdjkf")
+            return JsonResponse({
+                "error": "Login to make comments"
+            }, status=400)
     elif request.method == "GET":
         comments = Comment.objects.filter(post=post).order_by("-date").all()
         return JsonResponse([item.serialize() for item in comments], safe=False)

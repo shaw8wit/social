@@ -105,13 +105,10 @@ const editComment = (e) => {
                 })
             })
             .then(response => {
-                if (response.status === 204) {
-                    comment.remove();
-                    e.target.textContent = 'Comments';
-                    editComment(e);
-                } else {
-                    return response.json();
-                }
+                comment.remove();
+                e.target.textContent = 'Comments';
+                editComment(e);
+                return response.json();
             })
             .then(err => err && alert(err.error));
     }
