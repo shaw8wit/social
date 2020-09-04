@@ -62,6 +62,7 @@ const editComment = (e) => {
         e.target.textContent = 'Comment';
         const makeComment = document.createElement('div');
         makeComment.className = "card comment";
+        makeComment.style.animationPlayState = 'running';
         makeComment.innerHTML = `
             <div class="card-body">
                 <div class="card-title">
@@ -93,8 +94,8 @@ const editComment = (e) => {
         const comment = body.querySelector('.comment');
         const value = comment.querySelector('textarea[name="comment"]').value.trim();
         if (value.length === 0) {
-            comment.remove();
             e.target.textContent = 'Comments';
+            comment.remove();
             return;
         }
         fetch(`/comment/${id}`, {

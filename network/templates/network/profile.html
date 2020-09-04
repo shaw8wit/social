@@ -2,34 +2,28 @@
 
 {% block body %}
 
-<div class="profile fixed-top text-center container">
-    <div class="row mt-1">
-        <div class="col">
-            <h3>{{ userInfo.username }}</h3>
-            <h5>{{ userInfo.email }}</h5>
-        </div>
+<div class="profile text-center">
+    <h3>{{ userInfo.username }}</h3>
+    <h5>{{ userInfo.email }}</h5>
 
-        {% if user != userInfo and user.is_authenticated %}
-        <div class="col mt-2">
-            <form action="{% url 'follow' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="user" value={{ userInfo.id }}>
-                <input type="hidden" name="following" value={{ following }}>
-                <button class="btn btn-primary mb-2 py-3 px-4" type="submit">
-                    {% if following %}
-                    Unfollow
-                    {% else %}
-                    Follow
-                    {% endif %}
-                </button>
-            </form>
-        </div>
-        {% endif %}
+    {% if user != userInfo and user.is_authenticated %}
+    <div class="mt-2">
+        <form action="{% url 'follow' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="user" value={{ userInfo.id }}>
+            <input type="hidden" name="following" value={{ following }}>
+            <button class="btn btn-primary mb-2 py-3 px-4" type="submit">
+                {% if following %}
+                Unfollow
+                {% else %}
+                Follow
+                {% endif %}
+            </button>
+        </form>
     </div>
-    <div class="row">
-        <div class="col alert alert-warning">following: {{ userInfo.following.all.count }}</div>
-        <div class="col alert alert-success">followers: {{ followers }}</div>
-    </div>
+    {% endif %}
+    <div class="alert alert-warning">following: {{ userInfo.following.all.count }}</div>
+    <div class="alert alert-success">followers: {{ followers }}</div>
 </div>
 
 <div class="profile_post">

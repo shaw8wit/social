@@ -41,18 +41,53 @@ a:hover {
 }
 
 .profile {
-    margin-top: 3.5rem;
-    height: auto;
+    position: fixed;
+    left: 0px;
+    padding: 2rem;
+    height: 87%;
+    width: 30%;
     background: whitesmoke;
     border-radius: 0.5rem;
+    z-index: 2;
 }
+
 
 .comment__value {
     font-size: 14px;
 }
 
 .profile_post {
-    margin-top: 13rem;
+    position: fixed;
+    top: 5rem;
+    right: 0px;
+    bottom: 5px;
+    width: 65%;
+    overflow-y: scroll;
+}
+
+@keyframes grow {
+    0% {
+        opacity: 0;
+        height: 0px;
+        line-height: 0px;
+
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        height: 100%;
+        line-height: 100%;
+    }
+}
+
+.comment {
+    animation-name: grow;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
 }
 
 /* body {
