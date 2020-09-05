@@ -107,8 +107,11 @@ const editComment = (e) => {
             .then(response => {
                 comment.remove();
                 e.target.textContent = 'Comments';
-                editComment(e);
-                return response.json();
+                if (response.status === 204) {
+                    editComment(e);
+                } else {
+                    return response.json();
+                }
             })
             .then(err => err && alert(err.error));
     }

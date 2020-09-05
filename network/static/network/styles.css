@@ -40,30 +40,9 @@ a:hover {
     color: white;
 }
 
-/* .profile__details {
-    position: fixed;
-    left: 0px;
-    padding: 2rem;
-    height: 87%;
-    width: 30%;
-    background: whitesmoke;
-    border-radius: 0.5rem;
-    z-index: 2;
-} */
-
-
 .comment__value {
     font-size: 14px;
 }
-
-/* .profile__post {
-    position: fixed;
-    top: 5rem;
-    right: 0px;
-    bottom: 5px;
-    width: 65%;
-    overflow-y: scroll;
-} */
 
 @keyframes grow {
     0% {
@@ -93,15 +72,16 @@ a:hover {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-gap: 5vw;
-    background: blue;
 }
 
-@media only screen and (max-width: 770px) {
+@media only screen and (max-width: 767px) {
     .profile {
-        grid-template-rows: auto 1fr;
-        grid-gap: 5vh;
-        background: red;
+        display: block;
     }
+}
+
+.navbar {
+    background-color: black;
 }
 
 /* body {

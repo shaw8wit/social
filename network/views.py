@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,8 +16,11 @@ from .models import User, Post, Comment
 
 def index(request):
     posts = Post.objects.all().order_by("-date").all()
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        "posts": posts,
+        "posts": page_obj,
         "canPost": True
     })
 
@@ -25,7 +29,7 @@ def index(request):
 def following(request):
     se = {user.id for user in request.user.following.all()}
     return render(request, "network/index.html", {
-        "posts": reversed(Post.objects.filter(user__in=se)),
+        "posts": Post.objects.filter(user__in=se).order_by("-date").all(),
         "canPost": False
     })
 
@@ -112,14 +116,15 @@ def profile(request, id):
 def follow(request):
     if request.method == "POST":
         user = User.objects.get(id=request.POST["user"])
-        follower = request.user
-        following = request.POST["following"]
-        if following == "True":
-            follower.following.remove(user)
-        else:
-            follower.following.add(user)
-        follower.save()
-        return HttpResponseRedirect(reverse("profile", kwargs={'id': user.id}))
+        if user != request.user:
+            follower = request.user
+            following = request.POST["following"]
+            if following == "True":
+                follower.following.remove(user)
+            else:
+                follower.following.add(user)
+            follower.save()
+            return HttpResponseRedirect(reverse("profile", kwargs={'id': user.id}))
     return HttpResponseRedirect(reverse("index"))
 
 
@@ -174,7 +179,6 @@ def comment(request, id):
             comment.save()
             return HttpResponse(status=204)
         else:
-            print("djslfjsdklfjkldsjlfkjsklfjklsdjkf")
             return JsonResponse({
                 "error": "Login to make comments"
             }, status=400)

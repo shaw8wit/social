@@ -54,4 +54,50 @@
 {% empty %}
 <div class="alert alert-info p-4">No Posts Yet!</div>
 {% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if posts.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ posts.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ posts.number }} of {{ posts.paginator.num_pages }}.
+        </span>
+
+        {% if posts.has_next %}
+        <a href="?page={{ posts.next_page_number }}">next</a>
+        <a href="?page={{ posts.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+<ul class="pagination justify-content-center my-4">
+    {% if posts.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page=1">&laquo;</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+    </li>
+    {% endif %}
+
+    {% for c in 1|range:6 %}
+    {{ c }}
+    {% endfor %}
+
+    <!-- {% for i in n %}
+    <li class="page-item"><a class="page-link" href="#">{{ i }}</a></li>
+    {% endfor %} -->
+
+    {% if posts.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+    </li>
+    <li class="page-item">
+        <a class="page-link" href="?page={{ posts.paginator.num_pages }}">&raquo;</a>
+    </li>
+    {% endif %}
+</ul>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% load static %}
+{% load ranfun %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,25 +8,30 @@
     <title>{% block title %}Social Network{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <link href="{% static 'network/styles.css' %}" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark justify-content-around">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark">
+
         <a class="navbar-brand" href="#">Network</a>
-        <div>
-            <ul class="navbar-nav mr-auto">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile' user.username %}">
                         <strong>{{ user.username }}</strong>
                     </a>
                 </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">All Posts</a>
-                </li>
-                {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'following' %}">Following</a>
                 </li>
@@ -42,6 +48,7 @@
                 {% endif %}
             </ul>
         </div>
+
     </nav>
 
     <div class="container">
