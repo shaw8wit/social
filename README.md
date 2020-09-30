@@ -1,5 +1,11 @@
 # Social Networking
 
+![Github Followers](https://img.shields.io/github/followers/shaw8wit?label=Follow)
+![GitHub stars](https://img.shields.io/github/stars/shaw8wit/Social)
+![GitHub forks](https://img.shields.io/github/forks/shaw8wit/Social)
+![GitHub watchers](https://img.shields.io/github/watchers/shaw8wit/Social)
+![GitHub license](https://img.shields.io/github/license/shaw8wit/Social)
+
 A single application website built using django, javascript and custom API's and appropriate error handling.
 
 ## About
